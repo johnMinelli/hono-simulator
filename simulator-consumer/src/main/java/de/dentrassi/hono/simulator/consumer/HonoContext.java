@@ -49,7 +49,7 @@ public class HonoContext implements AutoCloseable {
     private static final long DEFAULT_CONNECT_TIMEOUT_MILLIS = 5_000;
 
     public HonoContext(final String tenant, final String host, final int port, final String user, final String password,
-            final Optional<String> trustedCerts, final Type type, final AppRuntime runtime) {
+            final Optional<String> trustedCerts, final Type type, final AppRuntime runtime, boolean tls) {
 
         this.tenant = tenant;
         this.type = type;
@@ -61,7 +61,7 @@ public class HonoContext implements AutoCloseable {
         config.setUsername(user);
         config.setPassword(password);
 
-        if (!Tls.disabled()) {
+        if (!Tls.disabled() && tls) {
             config.setTlsEnabled(true);
             config.setHostnameVerificationRequired(false);
             System.out.println("TLS enabled");
@@ -69,7 +69,7 @@ public class HonoContext implements AutoCloseable {
 
         config.setReconnectAttempts(-1);
 
-        trustedCerts.ifPresent(config::setTrustStorePath);
+        //trustedCerts.ifPresent(config::setTrustStorePath);
 
         Environment.getAs("HONO_INITIAL_CREDITS", Integer::parseInt).ifPresent(config::setInitialCredits);
 

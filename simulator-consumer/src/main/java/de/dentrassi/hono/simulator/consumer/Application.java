@@ -37,10 +37,11 @@ public class Application {
             final Application app = new Application(
                     Tenant.TENANT,
                     Environment.get("MESSAGING_SERVICE_HOST").orElse("localhost"), // HONO_DISPATCH_ROUTER_EXT_SERVICE_HOST
-                    Environment.getAs("MESSAGING_SERVICE_PORT_AMQP", 5671, Integer::parseInt), // HONO_DISPATCH_ROUTER_EXT_SERVICE_PORT
+                    Environment.getAs("MESSAGING_SERVICE_PORT", 15672, Integer::parseInt), // HONO_DISPATCH_ROUTER_EXT_SERVICE_PORT
                     getenv("HONO_USER"),
                     getenv("HONO_PASSWORD"),
-                    ofNullable(getenv("HONO_TRUSTED_CERTS"))
+                    ofNullable(getenv("HONO_TRUSTED_CERTS")),
+                    Environment.getAs("DISABLE_TLS", false, Boolean::parseBoolean)
                     );
 
             try {
@@ -67,7 +68,7 @@ public class Application {
     private final CountDownLatch latch = new CountDownLatch(1);
 
     public Application(final String tenant, final String host, final int port, final String user, final String password,
-            final Optional<String> trustedCerts) {
+            final Optional<String> trustedCerts, boolean tls) {
 
         final var type = Type.fromEnv();
 
@@ -84,7 +85,7 @@ public class Application {
         System.out.println("Key Manager: " + OpenSsl.supportsKeyManagerFactory());
         System.out.println("Host name validation: " + OpenSsl.supportsHostnameValidation());
 
-        this.hono = new HonoContext(tenant, host, port, user, password, trustedCerts, type, runtime);
+        this.hono = new HonoContext(tenant, host, port, user, password, trustedCerts, type, runtime, tls);
 
     }
 

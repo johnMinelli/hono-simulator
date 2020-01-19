@@ -13,6 +13,7 @@ package de.dentrassi.hono.simulator.http;
 import static de.dentrassi.hono.demo.common.Select.oneOf;
 import static io.glutamate.lang.Environment.consumeAs;
 import static io.glutamate.lang.Environment.getAs;
+import static java.lang.System.getenv;
 
 import java.util.Optional;
 
@@ -44,7 +45,7 @@ public class Application {
 
     private static final boolean NOAUTH = Environment.getAs("HTTP_NOAUTH", false, Boolean::parseBoolean);
 
-    private static final String PASSWORD = Environment.get("DEVICE_PASSWORD").orElse("hono-secret");
+    private static final String PASSWORD = Environment.get("DEVICE_PASSWORD").orElse("password");
 
     public static final boolean AUTO_REGISTER = Environment.getAs("AUTO_REGISTER", true, Boolean::parseBoolean);
 
@@ -79,7 +80,7 @@ public class Application {
 
         // create new client
 
-        final String deviceIdPrefix = System.getenv("HOSTNAME");
+        final String deviceIdPrefix = Environment.get("HOSTNAME").orElse("producer");
 
         final Optional<Registration> register = Registration.fromEnv();
         final MeterRegistry registry = runtime.getRegistry();
@@ -94,7 +95,7 @@ public class Application {
 
         for (int i = 0; i < numberOfDevices; i++) {
 
-            final String username = String.format("user-%s-%s", deviceIdPrefix, i);
+            final String username = String.format("%s-%s", deviceIdPrefix, i);
             final String deviceId = String.format("%s-%s", deviceIdPrefix, i);
 
             final var request = createRequest(webClient, config, Payload.payload(), Tenant.TENANT, deviceId,
@@ -164,9 +165,17 @@ public class Application {
 
     private static String buildUrl(final ProducerConfig config, final String tenant, final String deviceId) {
 
-        final String url = oneOf(System.getenv("HONO_HTTP_URL"));
+        String url = getenv("HONO_HTTP_URL");
         if (url == null || url.isBlank()) {
-            throw new IllegalArgumentException("'HONO_HTTP_URL' is missing or blank");
+            String host = getenv("HONO_HTTP_HOST");
+            String port = getenv("HONO_HTTP_PORT");
+            if (host != null) {
+                url = "http://" + host;
+                if (port != null && !port.isEmpty()) {
+                    url += ":" + port;
+                }
+            }else
+                throw new IllegalArgumentException("Both 'HONO_HTTP_URL' and 'HONO_HTTP_HOST', 'HONO_HTTP_PORT' missing or blank");
         }
 
         final var builder = new StringBuilder(url);

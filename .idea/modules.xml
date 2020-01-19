@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/simulator-common/simulator-common.iml" filepath="$PROJECT_DIR$/simulator-common/simulator-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simulator-consumer/simulator-consumer.iml" filepath="$PROJECT_DIR$/simulator-consumer/simulator-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simulator-http/simulator-http.iml" filepath="$PROJECT_DIR$/simulator-http/simulator-http.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simulator-mqtt/simulator-mqtt.iml" filepath="$PROJECT_DIR$/simulator-mqtt/simulator-mqtt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simulator-parent.iml" filepath="$PROJECT_DIR$/simulator-parent.iml" />
+    </modules>
+  </component>
+</project>

@@ -29,7 +29,7 @@ public class Consumer {
 
     public void handleMessage(final Message msg) {
         this.messages.increment();
-
+        System.out.println(msg.getBody().toString());
         final Section body = msg.getBody();
         if (body instanceof Data) {
             final Binary value = ((Data) body).getValue();

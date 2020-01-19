@@ -28,6 +28,7 @@ import io.vertx.core.net.OpenSSLEngineOptions;
 import io.vertx.mqtt.MqttClient;
 import io.vertx.mqtt.MqttClientOptions;
 import io.vertx.mqtt.MqttConnectionException;
+import org.apache.qpid.proton.codec.security.SaslOutcomeType;
 
 public class Device {
 
@@ -177,6 +178,7 @@ public class Device {
     }
 
     private void publishComplete(final Integer packetId) {
+        System.out.println(this.payload.getBuffer());
         stats.sent();
     }
 

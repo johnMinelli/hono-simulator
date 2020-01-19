@@ -29,7 +29,7 @@ public final class Tls {
     }
 
     public static boolean insecure() {
-        return Environment.getAs("TLS_INSECURE", Boolean.FALSE, Boolean::parseBoolean);
+        return Environment.getAs("DISABLE_TLS", Boolean.FALSE, Boolean::parseBoolean);
     }
 
     public static boolean disabled() {

@@ -37,10 +37,13 @@ public class RegistrationV1 extends AbstractRegistration {
 
         this.registrationUrl = deviceRegistryUrl
                 .newBuilder()
+                .addPathSegment("v1")
                 .addPathSegment("devices")
+
                 .build();
         this.credentialsUrl = deviceRegistryUrl
                 .newBuilder()
+                .addPathSegment("v1")
                 .addPathSegment("credentials")
                 .build();
     }

@@ -40,7 +40,7 @@ public class Device {
 
     private final Registration register;
 
-    private final String user;
+    private final String username;
 
     private final String deviceId;
 
@@ -53,7 +53,7 @@ public class Device {
     private final Payload payload;
 
     public Device(final Vertx vertx, final Supplier<HttpRequest<?>> requestProvider, final ProducerConfig config,
-            final String user, final String deviceId, final String tenant, final String password,
+            final String username, final String deviceId, final String tenant, final String password,
             final Optional<Registration> register, final Payload payload, final Statistics statistics) {
 
         Objects.requireNonNull(requestProvider);
@@ -63,7 +63,7 @@ public class Device {
         this.requestProvider = requestProvider;
         this.config = config;
 
-        this.user = user;
+        this.username = username;
         this.deviceId = deviceId;
         this.password = password;
         this.statistics = statistics;
@@ -79,20 +79,6 @@ public class Device {
 
     private void schedule(final long delay) {
         this.vertx.setTimer(delay, v -> tick());
-    }
-
-    protected Future<?> register() throws Exception {
-        final Future<?> f = Future.future();
-        this.vertx.executeBlocking(future -> {
-            try {
-                this.register.device(this.deviceId, this.user, this.password);
-                future.complete();
-            } catch (final Exception e) {
-                logger.warn("Failed to register device - deviceId: {}, user: {}", deviceId, user, e);
-                future.fail(e);
-            }
-        }, f);
-        return f;
     }
 
     protected void tick() {
@@ -130,6 +116,7 @@ public class Device {
     }
 
     protected void handleSuccess(final Instant start) {
+        System.out.println(this.payload.getBuffer());
         this.statistics.success();
         this.statistics.duration(Duration.between(start, Instant.now()));
     }
@@ -150,13 +137,13 @@ public class Device {
         try {
             switch (response.statusCode()) {
             case 401:
-            case 403: //$FALL-THROUGH$
-                if (this.register != null && Application.AUTO_REGISTER) {
+            case 403:
+            case 404: //$FALL-THROUGH$
                     return register();
-                }
-                break;
+                default:    throw new Exception("Unknown code error");
             }
         } catch (final Exception e) {
+            System.out.println(e.getMessage());
             logger.warn("Failed to handle failure", e);
         }
 
@@ -173,6 +160,24 @@ public class Device {
             return Future.succeededFuture();
         }
 
+    }
+
+    protected Future<?> register() throws Exception {
+        final Future<?> f = Future.future();
+        if (this.register != null && Application.AUTO_REGISTER) {
+            System.out.println("Failed to connect ... try auto register");
+            this.vertx.executeBlocking(future -> {
+                try {
+                    this.register.device(this.deviceId, this.username, this.password);
+                    future.complete();
+                } catch (final Exception e) {
+                    logger.warn("Failed to register device - deviceId: {}, user: {}", deviceId, username, e);
+                    future.fail(e);
+                }
+            }, f);
+        }else
+            throw new Exception();
+        return f;
     }
 
 }

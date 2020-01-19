@@ -55,10 +55,10 @@ public class Application {
 
     private static void run(final AppRuntime runtime) throws InterruptedException {
 
-        final int numberOfDevices = Environment.getAs("NUM_DEVICES", 10, Integer::parseInt);
-        final int numberOfThreads = Environment.getAs("NUM_THREADS", 10, Integer::parseInt);
+        final int numberOfDevices = Environment.getAs("NUM_DEVICES", 1, Integer::parseInt);
+        final int numberOfThreads = Environment.getAs("NUM_THREADS", 1, Integer::parseInt);
 
-        final String deviceIdPrefix = Environment.get("HOSTNAME").orElse("");
+        final String deviceIdPrefix = Environment.get("HOSTNAME").orElse("producer");
 
         final Optional<Registration> register = Registration.fromEnv();
 
@@ -89,12 +89,12 @@ public class Application {
 
             for (int i = 0; i < numberOfDevices; i++) {
 
-                final String username = String.format("user-%s-%s", deviceIdPrefix, i);
+                final String username = String.format("%s-%s", deviceIdPrefix, i);
                 final String deviceId = String.format("%s-%s", deviceIdPrefix, i);
 
                 System.out.format("New device - user: %s, clientId: %s%n", username, deviceId);
 
-                final Device device = new Device(runtime.getVertx(), username, deviceId, Tenant.TENANT, "hono-secret",
+                final Device device = new Device(runtime.getVertx(), username, deviceId, Tenant.TENANT, "password",
                         register, connected, stats);
 
                 final Runnable ticker;
