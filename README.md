@@ -19,17 +19,17 @@ You can directly download install the operator via [OperatorHub.io](https://oper
 
 All you need is the [OLM](https://github.com/operator-framework/operator-lifecycle-manager "Operator Lifecycle Manager") installed and then:
 
-    oc apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/operator/iot-simulator-simulators.crd.yaml
-    oc apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/operator/iot-simulator-simulatorconsumers.crd.yaml
-    oc apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/operator/iot-simulator-simulatorproducers.crd.yaml
-    oc apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/operator/iot-simulator.v0.1.0.clusterserviceversion.yaml
+    oc apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/manifests/iot-simulator/iot-simulator-simulators.crd.yaml
+    oc apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/manifests/iot-simulator/iot-simulator-simulatorconsumers.crd.yaml
+    oc apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/manifests/iot-simulator/iot-simulator-simulatorproducers.crd.yaml
+    oc apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/manifests/iot-simulator/iot-simulator.0.1.0.clusterserviceversion.yaml
 
 Or, if you use plain Kubernetes:
 
-    kubectl apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/operator/iot-simulator-simulators.crd.yaml
-    kubectl apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/operator/iot-simulator-simulatorconsumers.crd.yaml
-    kubectl apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/operator/iot-simulator-simulatorproducers.crd.yaml
-    kubectl apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/operator/iot-simulator.v0.1.0.clusterserviceversion.yaml
+    kubectl apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/manifests/iot-simulator/iot-simulator-simulators.crd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/manifests/iot-simulator/iot-simulator-simulatorconsumers.crd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/manifests/iot-simulator/iot-simulator-simulatorproducers.crd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/ctron/iot-simulator-operator/master/manifests/iot-simulator/iot-simulator.0.1.0.clusterserviceversion.yaml
 
 Also see: [OLM scripts](https://github.com/ctron/iot-simulator-operator/tree/master/operator)
 
@@ -102,3 +102,6 @@ overview.
 ![Screesshot of console](docs/console.png)
 
 Also see: [ctron/iot-simulator-console](https://github.com/ctron/iot-simulator-console "IoT simulator console")
+
+
+## Update the deployment with this version
