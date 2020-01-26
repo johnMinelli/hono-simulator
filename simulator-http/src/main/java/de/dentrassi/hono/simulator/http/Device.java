@@ -54,10 +54,9 @@ public class Device {
 
     public Device(final Vertx vertx, final Supplier<HttpRequest<?>> requestProvider, final ProducerConfig config,
             final String username, final String deviceId, final String tenant, final String password,
-            final Optional<Registration> register, final Payload payload, final Statistics statistics) {
+            final Optional<Registration> register, final Statistics statistics) {
 
         Objects.requireNonNull(requestProvider);
-        Objects.requireNonNull(payload);
 
         this.vertx = vertx;
         this.requestProvider = requestProvider;
@@ -68,7 +67,7 @@ public class Device {
         this.password = password;
         this.statistics = statistics;
         this.register = register.orElse(null);
-        this.payload = payload;
+        this.payload = new Payload();
 
     }
 
@@ -116,7 +115,7 @@ public class Device {
     }
 
     protected void handleSuccess(final Instant start) {
-        System.out.println(this.payload.getBuffer());
+        System.out.println("ok");
         this.statistics.success();
         this.statistics.duration(Duration.between(start, Instant.now()));
     }

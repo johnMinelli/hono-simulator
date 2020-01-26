@@ -17,51 +17,36 @@ import java.util.Arrays;
 
 import io.glutamate.lang.Environment;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.JsonObject;
 
 public final class Payload {
 
-    private static final Payload INSTANCE;
+    double payloadSize;
+    private double counter;
+    private JsonObject obj;
+    static final String contentType = "application/octet-stream";
 
-    static {
-        final int payloadSize = Environment.getAs("PAYLOAD_SIZE", 64, Integer::parseInt);
-
-        if (payloadSize < 0) {
-            INSTANCE = new Payload("application/octet-stream", new byte[0]);
-        } else {
-            final byte[] buffer = new byte[payloadSize];
-            Arrays.fill(buffer, (byte) 0x42);
-            INSTANCE = new Payload("application/octet-stream", buffer);
+    public Payload() {
+        payloadSize = Environment.getAs("PAYLOAD_SIZE", 20, Integer::parseInt);
+        if(payloadSize <= 0) {
+            payloadSize = 20;
         }
+        obj = new JsonObject();
+        //obj.put("name",deviceId); no need of this because the id is in the header
     }
 
-    private final String contentType;
-    private final byte[] payload;
-    private final Buffer buffer;
-
-    private Payload(final String contentType, final byte[] payload) {
-        this.contentType = contentType;
-        this.payload = payload;
-        this.buffer = Buffer.buffer(payload);
-    }
-
-    public static Payload payload() {
-        return INSTANCE;
-    }
-
-    public void write(final OutputStream out) throws IOException {
-        out.write(this.payload);
-    }
-
-    public String getContentType() {
-        return this.contentType;
-    }
-
-    public byte[] getBytes() {
-        return this.payload;
+    public void inc(){
+        counter=(counter+1)%payloadSize;
+        obj.put("value",counter);
     }
 
     public Buffer getBuffer() {
-        return this.buffer;
+        inc();
+        return obj.toBuffer();
+    }
+
+    static public String getContentType() {
+        return contentType;
     }
 
 }

@@ -85,7 +85,8 @@ public class HonoContext implements AutoCloseable {
 
         this.consumer = new Consumer(
                 this.runtime.getRegistry().counter("messages.received", commonTags),
-                this.runtime.getRegistry().counter("payload.received", commonTags));
+                this.runtime.getRegistry().counter("payload.received", commonTags),
+                this.runtime.getJsonBucket());
     }
 
     private ConsumerProvider getConsumerProvider(final HonoClient connectedClient) {

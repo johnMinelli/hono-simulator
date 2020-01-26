@@ -98,11 +98,11 @@ public class Application {
             final String username = String.format("%s-%s", deviceIdPrefix, i);
             final String deviceId = String.format("%s-%s", deviceIdPrefix, i);
 
-            final var request = createRequest(webClient, config, Payload.payload(), Tenant.TENANT, deviceId,
+            final var request = createRequest(webClient, config, Tenant.TENANT, deviceId,
                     username, PASSWORD);
 
             final Device device = new Device(runtime.getVertx(), () -> request, config, username, deviceId,
-                    Tenant.TENANT, PASSWORD, register, Payload.payload(), stats);
+                    Tenant.TENANT, PASSWORD, register, stats);
             device.start();
 
         }
@@ -136,8 +136,7 @@ public class Application {
         return WebClient.create(vertx, clientOptions);
     }
 
-    private static HttpRequest<Buffer> createRequest(final WebClient client, final ProducerConfig config,
-            final Payload payload, final String tenant, final String deviceId, final String user,
+    private static HttpRequest<Buffer> createRequest(final WebClient client, final ProducerConfig config, final String tenant, final String deviceId, final String user,
             final String password) {
 
         final var auth = Credentials.basic(user + "@" + tenant, password);
@@ -158,7 +157,7 @@ public class Application {
             request.putHeader("Authorization", auth);
         }
 
-        request.putHeader("Content-Type", payload.getContentType());
+        request.putHeader("Content-Type", Payload.getContentType());
 
         return request;
     }

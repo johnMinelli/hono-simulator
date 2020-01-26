@@ -78,7 +78,7 @@ public class Device {
         this.connectedCount = connectedCount;
         this.stats = stats;
 
-        this.payload = Payload.payload();
+        this.payload = new Payload();
 
         final MqttClientOptions options = new MqttClientOptions();
 
